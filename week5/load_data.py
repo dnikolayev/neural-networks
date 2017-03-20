@@ -28,13 +28,13 @@ def load_data(N):
   
             
     numdims = len(data['trainData'])
-    D = numdims - 1
-    M = math.floor(len(data['trainData'][0]) / N);
-    train_input = data['trainData'][0:D, 0:N * M].reshape(D, N, M)
-    train_target = data['trainData'][D, 0:N * M].reshape(1, N, M) 
-    valid_input = data['validData'][0:D, :]
-    valid_target = data['validData'][D, :]
-    test_input = data['testData'][0:D, :]
-    test_target = data['testData'][D, :]
+    D = int(numdims) - 1
+    M = int(math.floor(len(data['trainData'][0]) / N));
+    train_input = data['trainData'][0:D,0:N*M].reshape(D, N, M)
+    train_target = data['trainData'][D,0:N*M].reshape(1, N, M) 
+    valid_input = data['validData'][0:D,:]
+    valid_target = data['validData'][D,:]
+    test_input = data['testData'][0:D,:]
+    test_target = data['testData'][D,:]
 
     return [train_input, train_target, valid_input, valid_target, test_input, test_target, data['vocab']]
