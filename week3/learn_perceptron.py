@@ -1,7 +1,15 @@
+from __future__ import print_function
+from builtins import input
 import scipy.io  as sio
 import numpy as np
+import argparse
 
-from plot_perceptron import plot_perceptron
+parser = argparse.ArgumentParser()
+parser.add_argument('--with-graphs', help='runs with images plotting, requires matplotlib and Python as framework')
+args = parser.parse_args()
+
+if (args.with_graphs):
+    from plot_perceptron import plot_perceptron
 
 
 def learn_perceptron(neg_examples_nobias,pos_examples_nobias,w_init,w_gen_feas):
@@ -56,22 +64,22 @@ def learn_perceptron(neg_examples_nobias,pos_examples_nobias,w_init,w_gen_feas):
     # %Find the data points that the perceptron has incorrectly classified
     # %and record the number of errors it makes.
     iter = 0
-    (mistakes0, mistakes1) = eval_perceptron(neg_examples,pos_examples,w);
+    (mistakes0, mistakes1) = eval_perceptron(neg_examples,pos_examples,w)
 
     num_errs = len(mistakes0) + len(mistakes1);
     
     num_err_history.append(num_errs);
-    print('Number of errors in iteration %d:\t%d\n' % (iter,num_errs));
+    print('Number of errors in iteration %d:\t%d\n' % (iter,num_errs))
     print('weights:\t', str(w), '\n');
     #plot_perceptron(neg_examples, pos_examples, mistakes0, mistakes1, num_err_history, w, w_dist_history);
-    key = input('<Press enter to continue, q to quit.>');
+    key = input('<Press enter to continue, q to quit.>')
     if (key == 'q'):
         exit()
 
     #%If a generously feasible weight vector exists, record the distance
     #%to it from the initial weight vector.
     if (len(w_gen_feas) != 0):
-        w_dist_history.append(np.linalg.norm(w - w_gen_feas));
+        w_dist_history.append(np.linalg.norm(w - w_gen_feas))
 
 
     #%Iterate until the perceptron has correctly classified all points.
@@ -79,22 +87,23 @@ def learn_perceptron(neg_examples_nobias,pos_examples_nobias,w_init,w_gen_feas):
         iter = iter + 1
 
         #%Update the weights of the perceptron.
-        w = update_weights(neg_examples,pos_examples,w);
+        w = update_weights(neg_examples,pos_examples,w)
         #%If a generously feasible weight vector exists, record the distance
         #%to it from the current weight vector.
         if (len(w_gen_feas) != 0):
-            w_dist_history.append(np.linalg.norm(w - w_gen_feas));
+            w_dist_history.append(np.linalg.norm(w - w_gen_feas))
 
         #%Find the data points that the perceptron has incorrectly classified.
         #%and record the number of errors it makes.
-        (mistakes0, mistakes1) = eval_perceptron(neg_examples,pos_examples,w);
-        num_errs = len(mistakes0) + len(mistakes1);
-        num_err_history.append(num_errs);
+        (mistakes0, mistakes1) = eval_perceptron(neg_examples,pos_examples,w)
+        num_errs = len(mistakes0) + len(mistakes1)
+        num_err_history.append(num_errs)
 
-        print('Number of errors in iteration %d:\t%d\n' % (iter,num_errs));
-        plot_perceptron(neg_examples, pos_examples, mistakes0, mistakes1, num_err_history, w, w_dist_history);
-        key = input('<Press enter to continue, q to quit.>');
-        if (key == 'q'):
+        print('Number of errors in iteration %d:\t%d\n' % (iter,num_errs))
+        if args.with_graphs:
+            plot_perceptron(neg_examples, pos_examples, mistakes0, mistakes1, num_err_history, w, w_dist_history);
+        key = input('<Press enter to continue, q to quit.>')
+        if (str(key) == 'q'):
             break
 
     return w
@@ -117,18 +126,20 @@ def update_weights(neg_examples, pos_examples, w_current):
 # %       learning rule.
 # %% 
     w = w_current;
-    num_neg_examples = len(neg_examples);
-    num_pos_examples = len(pos_examples);
+    num_neg_examples = len(neg_examples)
+    num_pos_examples = len(pos_examples)
     lr = 1
     for this_case in neg_examples:
-        activation = np.sum(this_case*w);
+        activation = np.sum(this_case*w)
         if (activation >= 0):
-            #YOUR CODE HERE
+            for i in range(len(w)):     
+            #YOUR CODE
 
     for this_case in pos_examples:
         activation = np.sum(this_case*w);
         if (activation < 0):
-            #YOUR CODE HERE
+            for i in range(len(w)):
+            #Your CODE
 
     return w
 
@@ -148,21 +159,21 @@ def eval_perceptron(neg_examples, pos_examples, w):
 # %   mistakes0 - A vector containing the indices of the positive examples that have been
 # %       incorrectly classified as negative.
 # %%
-    num_neg_examples = len(neg_examples);
-    num_pos_examples = len(pos_examples);
+    num_neg_examples = len(neg_examples)
+    num_pos_examples = len(pos_examples)
     mistakes0 = [];
     mistakes1 = [];
     for i,x in enumerate(neg_examples):
         x = neg_examples[i,:];
-        activation = (x*w).sum();
+        activation = (x*w).sum()
         if (activation >= 0):
             mistakes0.append(i);
 
     for i,x in enumerate(pos_examples):
         x = pos_examples[i,:]; 
-        activation = (x*w).sum();
+        activation = (x*w).sum()
         if (activation < 0):
-            mistakes1.append(i);
+            mistakes1.append(i)
     return (mistakes0,mistakes1)
 
 
